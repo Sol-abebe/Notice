@@ -1,253 +1,242 @@
  <!DOCTYPE html>
 <html lang="am">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>አስቸኳይ ማስታወቂያ</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>አስቸኳይ ማስታወቂያ - የሲቪል ሰርቪስ ምዝገባ</title>
+    <style>
+        :root {
+            --primary-red: #d32f2f;
+            --dark-red: #9a0007;
+            --accent-yellow: #ffeb3b;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-light: #ffffff;
+            --text-dim: #e0e0e0;
+        }
 
-    body {
-      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    .notice-card {
-      background: rgba(255, 255, 255, 0.98);
-      border-radius: 16px;
-      max-width: 650px;
-      width: 100%;
-      padding: 35px 30px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-      border-left: 8px solid #dc2626;
-      opacity: 0;
-      transform: translateY(30px);
-      animation: fadeInUp 0.8s ease-out forwards;
-      position: relative;
-      overflow: hidden;
-    }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-    /* Pulsing border highlight */
-    .notice-card::before {
-      content: '';
-      position: absolute;
-      top: 0; right: 0; bottom: 0; left: 0;
-      border-radius: 16px;
-      box-shadow: inset 0 0 15px rgba(220, 38, 38, 0.2);
-      pointer-events: none;
-    }
+        .notice-card {
+            background-color: var(--card-bg);
+            border: 3px solid var(--primary-red);
+            border-radius: 12px;
+            max-width: 650px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(211, 47, 47, 0.4);
+            position: relative;
+            overflow: hidden;
+            animation: pulse-border 2s infinite alternate;
+        }
 
-    .header-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 15px;
-      margin-bottom: 20px;
-    }
+        @keyframes pulse-border {
+            0% {
+                box-shadow: 0 0 15px rgba(211, 47, 47, 0.4);
+            }
+            100% {
+                box-shadow: 0 0 30px rgba(211, 47, 47, 0.9);
+            }
+        }
 
-    .date {
-      font-weight: 600;
-      color: #64748b;
-      font-size: 0.95rem;
-    }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
 
-    .urgent-badge {
-      background-color: #dc2626;
-      color: #ffffff;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      letter-spacing: 0.5px;
-      animation: pulse 1.8s infinite;
-    }
+        .urgent-badge {
+            background-color: var(--primary-red);
+            color: white;
+            padding: 6px 16px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+            animation: blink 1.2s infinite;
+        }
 
-    .title {
-      color: #0f172a;
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 20px;
-      background: #f8fafc;
-      padding: 10px 15px;
-      border-radius: 8px;
-      border-right: 4px solid #2563eb;
-    }
+        @keyframes blink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.03); }
+        }
 
-    .content {
-      color: #334155;
-      line-height: 1.8;
-      font-size: 1.05rem;
-      margin-bottom: 25px;
-    }
+        h1 {
+            color: var(--accent-yellow);
+            font-size: 1.8rem;
+            line-height: 1.4;
+        }
 
-    .content p {
-      margin-bottom: 14px;
-      opacity: 0;
-      animation: fadeIn 0.5s ease-out forwards;
-    }
+        .content {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-dim);
+            margin-bottom: 25px;
+        }
 
-    .content p:nth-child(1) { animation-delay: 0.3s; }
-    .content p:nth-child(2) { animation-delay: 0.5s; }
-    .content p:nth-child(3) { animation-delay: 0.7s; }
+        .content p {
+            margin-bottom: 15px;
+        }
 
-    .warning-text {
-      color: #b91c1c;
-      font-weight: 700;
-      background-color: #fef2f2;
-      padding: 12px 15px;
-      border-radius: 8px;
-      border: 1px solid #fecaca;
-    }
+        .highlight-box {
+            background-color: rgba(211, 47, 47, 0.15);
+            border-right: 4px solid var(--primary-red);
+            border-left: 4px solid var(--primary-red);
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
 
-    /* Countdown Timer Box */
-    .countdown-container {
-      background: #0f172a;
-      color: #ffffff;
-      border-radius: 12px;
-      padding: 15px 20px;
-      text-align: center;
-      margin-bottom: 25px;
-    }
+        .deadline-container {
+            display: flex;
+            justify-content: space-around;
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
 
-    .countdown-title {
-      font-size: 0.85rem;
-      color: #94a3b8;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-    }
+        .deadline-item {
+            flex: 1;
+        }
 
-    .timer {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      font-weight: 700;
-    }
+        .deadline-item:first-child {
+            border-right: 1px solid #444;
+        }
 
-    .time-unit {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+        .deadline-title {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
 
-    .time-unit span:first-child {
-      font-size: 1.5rem;
-      color: #f87171;
-    }
+        .deadline-date {
+            font-size: 1.3rem;
+            color: var(--accent-yellow);
+            font-weight: bold;
+        }
 
-    .time-unit span:last-child {
-      font-size: 0.7rem;
-      color: #cbd5e1;
-    }
+        .warning-text {
+            color: #ff6b6b;
+            font-weight: bold;
+            text-align: center;
+            background-color: rgba(154, 0, 7, 0.2);
+            padding: 12px;
+            border-radius: 6px;
+        }
 
-    .footer {
-      text-align: right;
-      border-top: 1px solid #e2e8f0;
-      padding-top: 15px;
-      color: #475569;
-      font-weight: 600;
-    }
+        .footer {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+        }
 
-    /* Keyframe Animations */
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        .signature {
+            font-weight: bold;
+            color: var(--accent-yellow);
+        }
 
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
-    }
+        .action-btn {
+            background: linear-gradient(135deg, var(--primary-red), var(--dark-red));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: transform 0.2s, background 0.3s;
+        }
 
-    @keyframes pulse {
-      0% {
-        box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
-      }
-      70% {
-        box-shadow: 0 0 0 10px rgba(220, 38, 38, 0);
-      }
-      100% {
-        box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
-      }
-    }
-  </style>
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(211, 47, 47, 0.5);
+        }
+
+        @media (max-width: 480px) {
+            .notice-card { padding: 20px; }
+            h1 { font-size: 1.4rem; }
+            .deadline-container { flex-direction: column; gap: 10px; }
+            .deadline-item:first-child { border-right: none; border-bottom: 1px solid #444; padding-bottom: 10px; }
+        }
+    </style>
 </head>
 <body>
 
-  <div class="notice-card">
-    <div class="header-bar">
-      <span class="date">ቀን፡ 18 / 12 / 2018 ዓ.ም</span>
-      <span class="urgent-badge">አስቸኳይ ማስታወቂያ</span>
+    <div class="notice-card">
+        <div class="header">
+            <div class="urgent-badge">🚨 አስቸኳይ ማስታወቂያ</div>
+            <h1>የሲቪል ሰርቪስ ዳታቤዝ ምዝገባን ይመለከታል</h1>
+        </div>
+
+        <div class="content">
+            <p>ለሆስፒታላችን ሠራተኞች በሙሉ፤</p>
+            
+            <p>እስከ አሁን በሰው ኃይል አስተዳደር (HR) ቢሮ በመገኘት በሲቪል ሰርቪስ ዳታቤዝ (Civil Service Database) ላይ ያልተመዘገባችሁ ሠራተኞች የምዝገባው የመጨረሻ ጊዜ <strong>ዛሬ እና ነገ ብቻ</strong> መሆኑን እናሳውቃለን።</p>
+
+            <div class="deadline-container">
+                <div class="deadline-item">
+                    <div class="deadline-title">ቀን 1</div>
+                    <div class="deadline-date">ዛሬ</div>
+                </div>
+                <div class="deadline-item">
+                    <div class="deadline-title">ቀን 2 (የመጨረሻ)</div>
+                    <div class="deadline-date">ነገ</div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                📍 ቦታ፡ በሰው ኃይል አስተዳደር ቢሮ (HR Office)
+            </div>
+
+            <div class="warning-text">
+                ⚠️ ማሳሰቢያ፡ በተጠቀሰው ጊዜ ውስጥ ያልተመዘገበ ሠራተኛ ከምዝገባ መዘገየት ጋር ተያይዞ ለሚመጡ ማንኛውም አሰራራዊ ጉዳቶችና አደጋዎች (Risks) ራሱ ኃላፊነቱን የሚወስድ መሆኑን እናሳውቃለን።
+            </div>
+        </div>
+
+        <button class="action-btn" onclick="acknowledgeNotice()">ተረድቻለሁ (አረጋግጥ)</button>
+
+        <div class="footer">
+            <span>የሠራተኞች ተወካይ</span>
+            <span class="signature">የሰው ኃብት ልማት አስተዳደር/HR</span>
+        </div>
     </div>
 
-    <div class="title">
-      ጉዳዩ፦ ምዝገባን ስለማጠናቀቅ
-    </div>
-
-    <div class="content">
-      <p>በሲቪል ሰርቪስ ዳታቤዝ ላይ HR ሄዳችሁ እስካሁን ምዝገባ ያላጠናቀቃችሁ ሰራተኞች እስከ <strong>ነሐሴ 20 ቀን 2018 ዓ.ም</strong> ድረስ ምዝገባችሁን በአስቸኳይ እንድታጠናቅቁ እናሳስባለን።</p>
-      
-      <p class="warning-text">⚠️ በተጠቀሰው የጊዜ ገደብ ውስጥ ተመዝግበው ያላጠናቀቁ ሰራተኞች የወር ደሞዛቸው የሚታገድ መሆኑን በጥብቅ እንገልጻለን።</p>
-      
-      <p>በመሆኑም አላስፈላጊ እንግልት እንዳይገጥማችሁ በተሰጠው የጊዜ ገደብ ውስጥ ምዝገባችሁን እንድታጠናቅቁ እናሳስባለን።</p>
-    </div>
-
-    <!-- Live Countdown -->
-    <div class="countdown-container">
-      <div class="countdown-title">የቀረው ጊዜ (እስከ ነሐሴ 20)</div>
-      <div class="timer" id="timer">
-        <div class="time-unit"><span id="days">00</span><span>ቀናት</span></div>
-        <div class="time-unit"><span id="hours">00</span><span>ሰዓታት</span></div>
-        <div class="time-unit"><span id="minutes">00</span><span>ደቂቃዎች</span></div>
-        <div class="time-unit"><span id="seconds">00</span><span>ሰከንዶች</span></div>
-      </div>
-    </div>
-
-    <div class="footer">
-      ከሰላምታ ጋር!<br>
-      <strong>የሰራተኞች ተወካይ</strong>
-    </div>
-  </div>
-
-  <script>
-    // Target date: Nehase 20, 2018 EC (~ August 26, 2026)
-    const deadline = new Date("2026-08-26T23:59:59").getTime();
-
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const diff = deadline - now;
-
-      if (diff <= 0) {
-        document.getElementById("timer").innerHTML = "<span style='color:#f87171;'>የምዝገባ ጊዜው አብቅቷል!</span>";
-        return;
-      }
-
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-      document.getElementById("days").textContent = String(days).padStart(2, '0');
-      document.getElementById("hours").textContent = String(hours).padStart(2, '0');
-      document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
-      document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
-    }
-
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
-  </script>
-
+    <script>
+        function acknowledgeNotice() {
+            const btn = document.querySelector('.action-btn');
+            btn.style.backgroundColor = '#2e7d32';
+            btn.innerText = '✓ መልዕክቱን አንብበዋል';
+            btn.disabled = true;
+            btn.style.cursor = 'default';
+            
+            alert('ማስታወቂያውን ስላረጋገጡ እናመሰግናለን። እባክዎን ሳይዘገዩ ወደ HR ቢሮ በመሄድ ይመዝገቡ።');
+        }
+    </script>
 </body>
 </html>
